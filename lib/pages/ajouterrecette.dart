@@ -1,5 +1,6 @@
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette_seconde.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,9 @@ class _AjouterRecetteState extends State<AjouterRecette> {
   bool initReader = true;
   var _image;
   var _video;
+  var editImg = false;
+  var editVideo = false;
+  var newR = true;
   // final Uint8List _webImage = Uint8List(8);
   final picker = ImagePicker();
   late Recette recette;
@@ -38,12 +42,13 @@ class _AjouterRecetteState extends State<AjouterRecette> {
   @override
   Widget build(BuildContext context) {
     Recette? recetteOld = widget.recette;
-    if (recetteOld != null) {
+    if (recetteOld != null && _image == null) {
       _nameRecette.text = recetteOld.nom;
       _descriptionRecette.text = recetteOld.description;
       _image = apiImageUrl + recetteOld.photo;
       _video = apiVideoUrl + recetteOld.video;
       _ingredientList = recetteOld.ingredientList!;
+      newR = false;
       //_controller =
     }
 
@@ -140,28 +145,60 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: 170,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 243, 243),
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              showOptions();
-                              debugPrint(_image!.path);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: _image != null
-                                  ? Image.network(
-                                      _image is String ? _image : _image!.path)
-                                  : Image.asset("assets/images/iconeImage.png"),
+                      Stack(
+                        children: [
+                          Container(
+                            width: 170,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 243, 243),
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                              child: InkWell(
+                                onTap: () {
+                                  showOptions();
+                                  //debugPrint(_image!.path);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: _image != null
+                                      ? Image.network(_image is String
+                                          ? _image
+                                          : _image!.path)
+                                      : Image.asset(
+                                          "assets/images/iconeImage.png"),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Visibility(
+                            visible: !newR,
+                            child: Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: const BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20))),
+                                child: InkWell(
+                                  onTap: () => editImg
+                                      ? HttpUploadService.updateImage(
+                                          photoName: recetteOld!.photo,
+                                          image: _image)
+                                      : showOptions(),
+                                  child: Icon(
+                                    editImg ? Icons.save : Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 10,
@@ -178,12 +215,44 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                             onTap: () {
                               showOptions(img: false);
                             },
-                            child: SizedBox(
-                              width: 300,
-                              height: 200,
-                              child: _controller is VideoPlayerController
-                                  ? VideoPlayer(_controller)
-                                  : Image.asset("assets/images/iconeVideo.png"),
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width: 300,
+                                  height: 200,
+                                  child: _controller is VideoPlayerController
+                                      ? VideoPlayer(_controller)
+                                      : Image.asset(
+                                          "assets/images/iconeVideo.png"),
+                                ),
+                                Visibility(
+                                  visible: !newR,
+                                  child: Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: const BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight:
+                                                  Radius.circular(20))),
+                                      child: InkWell(
+                                        onTap: () => editVideo
+                                            ? HttpUploadService.updateVideo(
+                                                videoName: recetteOld!.video,
+                                                video: _video)
+                                            : showOptions(img: false),
+                                        child: Icon(
+                                          editVideo ? Icons.save : Icons.edit,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -196,15 +265,21 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                           width: 150,
                           child: ElevatedButton(
                             onPressed: () {
-                              //debugPrint(_image!.path);
+                              print("----------------------");
+                              print(_nameRecette.text);
+                              print(_image);
+                              print(recetteOld?.id);
                               // RecetteService(recette:
                               recette = Recette(
-                                  id: recetteOld!.id,
+                                 // id: recetteOld!.id,
                                   nom: _nameRecette.text,
                                   description: _descriptionRecette.text,
                                   photo: _image,
                                   video: _video!,
                                   ingredientList: _ingredientList);
+                                if(recetteOld?.id != null){
+                                  recette.id = recetteOld?.id;
+                                }
                               debugPrint('la recette : ${recette.description}');
                               //);
                               Navigator.push(
@@ -250,6 +325,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
     setState(() {
       if (pickedFile != null) {
         _video = pickedFile;
+        editVideo = true;
         // File(pickedFile.path);
       }
     });
@@ -262,6 +338,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
     setState(() {
       if (pickedFile != null) {
         _video = pickedFile;
+        editVideo = true;
         //  File(pickedFile.path);
       }
     });
@@ -278,6 +355,8 @@ class _AjouterRecetteState extends State<AjouterRecette> {
       if (pickedFile != null) {
         print("je change de valeur");
         _image = pickedFile;
+        editImg = true;
+
         print("voici le nom de la photo => ${pickedFile.path}");
       }
     });
@@ -290,6 +369,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
     setState(() {
       if (pickedFile != null) {
         _image = pickedFile;
+        editImg = true;
         // File(pickedFile.path);
       }
     });

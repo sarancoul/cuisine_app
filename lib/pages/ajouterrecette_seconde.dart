@@ -169,15 +169,15 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                       debugPrint(widget.recette.description.toString());
                       print("je vais initier l'envoi");
                       widget.recette.ingredientList = getIngredientData();
-                      print("L'id de la recette =>${widget.recette.id!}");
+                      print("L'id de la recette =>${widget.recette.id}");
                       //ImageService.uploadFile(widget.recette.photo);
                       print("Envoi de la recette");
                       if (widget.recette.id != null) {
-                        print("je vais updaté la recette");
+                        print("je vais updater la recette");
                         RecetteService.updateRecette(recette: widget.recette);
                       } else {
                         HttpUploadService.addAddRecette(
-                            recette: widget.recette);
+                            context: context, recette: widget.recette);
                       }
                       //// //
                       //uploadFile(widget.recette.photo);
@@ -209,7 +209,10 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
   List<Ingredient> getIngredientData() {
     ingrediantList = [];
     for (var mwidget in ingredients) {
-      //debugPrint(mwidget.toString());
+      debugPrint(mwidget.ingredientId.toString());
+      debugPrint("voici le prix => ${mwidget.prixController.text}");
+      debugPrint("voici l'ingr => ${mwidget.ingreController.text}");
+
       ingrediantList.add(Ingredient(
           id: mwidget.ingredientId,
           nom: mwidget.ingreController.text,
@@ -217,6 +220,7 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
     }
     // setState(() {});
 
+    print("terminé");
     return ingrediantList;
     // print(data.length);
   }

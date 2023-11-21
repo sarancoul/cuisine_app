@@ -1,13 +1,13 @@
 
 class Utilisateur {
-  final String nom;
+  final String? nom;
   final String prenom;
   final String email;
   final String motdepasse;
   final String photo;
 
   const Utilisateur({
-    required this.nom,
+    this.nom,
     required this.prenom,
     required this.email,
     required this.motdepasse,

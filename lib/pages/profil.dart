@@ -1,4 +1,7 @@
+import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
+import 'package:flutte_cuisine/widgets/cart_recette.dart';
 import 'package:flutter/material.dart';
 
 class Profil extends StatefulWidget {
@@ -9,9 +12,20 @@ class Profil extends StatefulWidget {
 }
 
 class _ProfilState extends State<Profil> {
+  // late int dishCount;
   String title = 'first page';
   String Supprimercompte = 'Supprimer compte';
   String Deconnexion = 'Deconnexion';
+  late Future<List<Recette>> futurerecettes;
+  late Future<int> dishCount;
+
+  @override
+  void initState() {
+    super.initState();
+    futurerecettes = HttpUploadService().fetchRecettes();
+    dishCount = HttpUploadService.getNombreTotalRecettes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,66 +98,81 @@ class _ProfilState extends State<Profil> {
                 ],
               ),
               const Text("@nameprofile"),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                   ),
-                  Text("180 plats"),
-                  Text("180 Evaluations"),
+                  FutureBuilder(
+                    future: dishCount,
+                    builder: (context, snapshot) {
+                      // print(snapshot.data.)
+                      int? val = snapshot.data;
+                      return Text('$val plats');
+                    },
+                  ),
+                  const Text("180 Evaluations"),
                 ],
               ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 400,
-                child: GridView(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: 0.8),
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    //for (var i = 0; i < 1; i++) CardRecette(show: false),
-                    Card(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      elevation: 9,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              // showRecipeDescriptionDialog(
-                              //   context,
-                              //   '',
-                              //   'assets/images/zame.png',
-                              //   'Zamin chèman',
-
-                              // );
-                            },
-                            child: Image.asset("assets/images/zame.png"),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Zamin chèman",
-                                  style: TextStyle(
-                                      color: secondaryColor,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Appel à la méthode buildRecetteGrid
+              FutureBuilder<List<Recette>>(
+                future: futurerecettes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Text('Erreur de chargement des recettes');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text('Aucune recette disponible');
+                  } else {
+                    List<Recette> recettes = snapshot.data!;
+                    return GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      childAspectRatio: 1 / 1.3,
+                      children: [
+                        for (var recette in recettes)
+                          CardRecette(
+                              show: true, editable: true, recette: recette),
+                      ],
+                    );
+                  }
+                },
+              )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Déplacement de la méthode buildRecetteGrid en dehors de la méthode build
+  Widget buildRecetteGrid() {
+    return FutureBuilder<List<Recette>>(
+      future: futurerecettes,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return const Text('Erreur de chargement des recettes');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Text('Aucune recette disponible');
+        } else {
+          List<Recette> recettes = snapshot.data!;
+          return GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            childAspectRatio: 1 / 1.3,
+            children: [
+              for (var recette in recettes)
+                CardRecette(show: true, editable: true, recette: recette),
+            ],
+          );
+        }
+      },
     );
   }
 }

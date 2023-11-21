@@ -1,5 +1,5 @@
 class Ingredient {
-  final int? id;
+  int? id;
   final String nom;
   final String prix;
 

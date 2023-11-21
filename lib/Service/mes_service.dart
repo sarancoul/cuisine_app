@@ -113,102 +113,102 @@ Future<void> showRecipeDescriptionDialog(BuildContext context,
                                 fontWeight: FontWeight.bold,
                                 color: secondaryColor),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('. 2kg de poulets',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 2kg de riz pafumée casser',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 6gouses dails',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 2bouquet de percile',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 3poivres jaunes',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 2tomates fraiches',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 150g de tomates concentrée',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 200ml huile pour le riz',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. 2feuilles de laurier',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. Legume aux choix',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. sel selon vrotre gout',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                              Text('. quelques gombo',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black)),
-                            ],
-                          ),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   children: [
+                          //     Text('. 2kg de poulets',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 2kg de riz pafumée casser',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 6gouses dails',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 2bouquet de percile',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 3poivres jaunes',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 2tomates fraiches',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 150g de tomates concentrée',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 200ml huile pour le riz',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. 2feuilles de laurier',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. Legume aux choix',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. sel selon vrotre gout',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //     Text('. quelques gombo',
+                          //         style: TextStyle(
+                          //             fontSize: 12, color: Colors.black)),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
                     // partie droite
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Prix',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: secondaryColor)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('300f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('6000f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('50f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('25f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('100f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('100f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('1000f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('25f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('Atention',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('6000f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                            Text('6000f',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black)),
-                          ],
-                        ),
-                      ],
-                    )
+                   // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Text('Prix',
+                    //         style: TextStyle(
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.bold,
+                    //             color: secondaryColor)),
+                    //     Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text('300f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('6000f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('50f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('25f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('100f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('100f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('1000f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('25f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('Atention',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('6000f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //         Text('6000f',
+                    //             style: TextStyle(
+                    //                 fontSize: 12, color: Colors.black)),
+                    //       ],
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 ),
               ),

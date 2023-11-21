@@ -8,7 +8,7 @@ class RecetteService {
   static const apiUrl = 'http://localhost:8081/recette';
   RecetteService(this.baseUrl);
 
-  Future<List<Recette>> rechercherRecettesParNom(String nom) async {
+  /*Future<List<Recette>> rechercherRecettesParNom(String nom) async {
     final response = await http.get(Uri.parse('$baseUrl/search/nom?nom=$nom'));
 
     if (response.statusCode == 200) {
@@ -18,7 +18,7 @@ class RecetteService {
       throw Exception(
           'Erreur lors de la recherche de recettes : ${response.statusCode}');
     }
-  }
+  }*/
 
   static Future<Recette> updateRecette({required Recette recette}) async {
     print("en cours dans le update${recette.id}");
@@ -62,8 +62,8 @@ class RecetteService {
       print('Recette supprimé avec succès');
       return true;
     } else if (response.statusCode == 404) {
-      return false;
       print('Recette non trouvé');
+      return false;
     } else {
       throw Exception(
           'Impossible de supprimer la recette : ${response.statusCode}');

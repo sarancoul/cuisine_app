@@ -1,37 +1,39 @@
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 
 class Recette {
-  final int? id;
+  int? id;
   final String nom;
   final String description;
   var photo;
   var video;
   List<Ingredient>? ingredientList;
+  double points;
 
   Recette(
       {this.id,
-        this.ingredientList,
+      this.ingredientList,
       required this.nom,
       required this.description,
       required this.photo,
+      this.points = 0,
       this.video});
 
-
-
   factory Recette.fromJson(Map<String, dynamic> json) {
+    print(json['evaluationPoint']);
     return Recette(
         id: json['id'],
         nom: json['nomrecette'],
         description: json['description'],
         photo: json['photo'] ??
-            '', // Si 'photo' est null, utilisez une chaîne vide comme valeur par défaut
+            '', 
         video: json['videoData'] ??
-            '', // Si 'videoData' est null, utilisez une chaîne vide comme valeur par défaut
+            '', 
+        points: double.parse(json['evaluationPoint'].toString()),
         ingredientList: List<Ingredient>.from(
           json['ingredients']
                   .map((ingredient) => Ingredient.fromJson(ingredient)) ??
               [],
-          //utilisateur Utilisateur.fromJson(json['utilisateur']);
+        
         ));
   }
 }

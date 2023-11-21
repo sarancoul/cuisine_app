@@ -1,4 +1,5 @@
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/Service/Profile_service.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,17 +7,24 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CardRecette extends StatefulWidget {
   Recette recette;
-  CardRecette({super.key, this.show = false, required this.recette});
+  bool editable;
+  CardRecette({
+    super.key,
+    this.editable = false,
+    this.show = true,
+    required this.recette,
+  });
   bool show;
+
   @override
   State<CardRecette> createState() => _CardRecetteState();
 }
 
 class _CardRecetteState extends State<CardRecette> {
+  
   @override
   Widget build(BuildContext context) {
     var myrecette = widget.recette;
-
     return Card(
       color: const Color.fromARGB(255, 255, 255, 255),
       elevation: 10,
@@ -24,12 +32,12 @@ class _CardRecetteState extends State<CardRecette> {
         children: [
           InkWell(
             onTap: () {
-              showRecipeDescriptionDialog(context, myrecette);
+              showRecipeDescriptionDialog(context, widget.editable, myrecette);
             },
             child: myrecette.photo != null
                 ? FadeInImage.assetNetwork(
                     width: double.infinity,
-                    height: 300,
+                    height: MediaQuery.of(context).size.width * 0.3,
                     placeholder: "assets/images/iconeImage.png",
                     image: apiImageUrl + myrecette.photo,
                     imageErrorBuilder: (context, error, stackTrace) {
@@ -58,36 +66,41 @@ class _CardRecetteState extends State<CardRecette> {
               ],
             ),
           ),
-          SizedBox(
-            height: 15,
+          SizedBox( 
+            height: 40,
             child: Visibility(
               visible: widget.show,
               child: RatingBar(
                 itemSize: 30,
-                initialRating: 3,
+                initialRating: myrecette.points,
                 direction: Axis.horizontal,
                 allowHalfRating: true,
                 itemCount: 5,
                 ratingWidget: RatingWidget(
                   full: const Icon(
                     Icons.star,
-                    size: 2,
+                    size: 16,
                     color: primaryColor,
                   ),
                   half: const Icon(
-                    size: 2,
+                    size: 16,
                     Icons.star,
                     color: Colors.white,
                   ),
                   empty: const Icon(
                     Icons.star,
+                    size: 16,
                     color: Colors.grey,
                   ),
                 ),
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                onRatingUpdate: (rating) {
-                  setState(() {});
+                onRatingUpdate: (rating) async {
+                  await HttpUploadService.sendRating(rating, myrecette);
+                  setState(() {
+                    myrecette.points = rating;
+                  });
                 },
+                tapOnlyMode: true,
                 updateOnDrag: true,
               ),
             ),

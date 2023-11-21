@@ -1,19 +1,21 @@
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Service/Recette_service.dart';
 import 'package:flutte_cuisine/Service/mes_service.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ServicePro extends StatefulWidget {
-  const ServicePro({super.key, required final Recette recette});
+  bool peutModifier;
+  ServicePro({super.key, required Recette recette, required this.peutModifier});
 
   @override
   State<ServicePro> createState() => _ServiceProState();
 }
 
 Future<void> showRecipeDescriptionDialog(
-    BuildContext context, Recette recette) async {
+    BuildContext context, bool editable, Recette recette) async {
   String description = recette.description;
   String imageAsset = recette.photo;
   String recipeName = recette.nom;
@@ -185,73 +187,83 @@ Future<void> showRecipeDescriptionDialog(
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirmation de suppression'),
-                            content:
-                                const Text('Voulez-vous vraiment supprimer?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Non'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Oui'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Supprimé avec succès'),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: secondaryColor,
-                    ),
-                    child: const Text(
-                      'Supprimer',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 150.0, // Ajoutez de l'espace entre les boutons
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AjouterRecette(
-                                recette: recette,
-                              ),
-                            ));
+              Visibility(
+                visible: editable,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirmation de suppression'),
+                              content:
+                                  const Text('Voulez-vous vraiment supprimer?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Non'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('Oui'),
+                                  onPressed: () async {
+                                    bool result =
+                                        await RecetteService.supprimerRecette(
+                                            recette.id!);
+                                    if (result) {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Supprimé avec succès'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: secondaryColor,
+                      ),
                       child: const Text(
-                        'Modifier',
+                        'Supprimer',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      width: 150.0, // Ajoutez de l'espace entre les boutons
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AjouterRecette(
+                                  recette: recette,
+                                ),
+                              ));
+                        },
+                        child: const Text(
+                          'Modifier',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

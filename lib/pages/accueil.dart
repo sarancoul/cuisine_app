@@ -19,6 +19,27 @@ class _AccueilState extends State<Accueil> {
   void initState() {
     super.initState();
     futurerecettes = HttpUploadService().fetchRecettes();
+    //ServicePro(peutModifier: false,);
+  }
+
+  Future<void> _searchRecettes(String search) async {
+    try {
+      setState(() {
+        futurerecettes = HttpUploadService().searchRecipes(search);
+      });
+    } catch (e) {
+      print('Erreur lors de la recherche de recettes : $e');
+    }
+  }
+
+  Future<void> _showRecettes() async {
+    try {
+      setState(() {
+        futurerecettes = HttpUploadService().fetchRecettes();
+      });
+    } catch (e) {
+      print('Erreur lors de la recherche de recettes : $e');
+    }
   }
 
   @override
@@ -46,13 +67,15 @@ class _AccueilState extends State<Accueil> {
         children: [
           Expanded(
             child: Container(
-              width: MediaQuery.of(context).size.width*.9,
+              width: MediaQuery.of(context).size.width * .9,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextFormField(
                 controller: _nomcontroller,
+                onChanged: (text) =>
+                    text == "" ? _showRecettes() : _searchRecettes(text),
                 decoration: InputDecoration(
                   hintText: "Rechercher une recette...",
                   border: OutlineInputBorder(
@@ -100,7 +123,7 @@ class _AccueilState extends State<Accueil> {
             childAspectRatio: 1 / 1.3,
             children: [
               for (var recette in recettes)
-                CardRecette(show: true, recette: recette),
+                CardRecette(show: true, editable: false, recette: recette),
             ],
           );
         }
@@ -117,76 +140,7 @@ class _AccueilState extends State<Accueil> {
           childAspectRatio: 0.8,
         ),
         scrollDirection: Axis.vertical,
-        children: const [
-          // Card(
-          //   elevation: 10,
-          //   child: Column(
-          //     children: [
-          //       InkWell(
-          //         onTap: () {
-          //           // showRecipeDescriptionDialog(
-          //           //   context,
-          //           //   '',
-          //           //   'assets/images/zame.png',
-          //           //   'Zamin chèman',
-          //           // );
-          //         },
-          //         child: Image.asset("assets/images/zame.png"),
-          //       ),
-          //       const Padding(
-          //         padding: EdgeInsets.all(10.0),
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //           children: [
-          //             Text(
-          //               "Zamin chèman",
-          //               style: TextStyle(
-          //                 color: secondaryColor,
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //             Icon(
-          //               Icons.message,
-          //               color: primaryColor,
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //       SizedBox(
-          //         height: 15,
-          //         child: RatingBar(<
-          //           itemSize: 30,
-          //           initialRating: 3,
-          //           direction: Axis.horizontal,
-          //           allowHalfRating: true,
-          //           itemCount: 5,
-          //           ratingWidget: RatingWidget(
-          //             full: const Icon(
-          //               Icons.star,
-          //               size: 2,
-          //               color: primaryColor,
-          //             ),
-          //             half: const Icon(
-          //               size: 2,
-          //               Icons.star,
-          //               color: Colors.white,
-          //             ),
-          //             empty: const Icon(
-          //               Icons.star,
-          //               color: Colors.grey,
-          //             ),
-          //           ),
-          //           itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          //           onRatingUpdate: (rating) {
-          //             setState(() {});
-          //           },
-          //           updateOnDrag: true,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-        ],
+        children: const [],
       ),
     );
   }
