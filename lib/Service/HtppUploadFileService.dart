@@ -111,7 +111,7 @@ class HttpUploadService {
       final response = await http.get(Uri.parse(getRecetteUrl));
       print(response.body);
       if (response.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(response.body);
+        List<dynamic> jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         // print("j'seuis la");
         try {
           List<Recette> recettes =
@@ -132,7 +132,7 @@ class HttpUploadService {
   }
 
 ///////////////////////////#####################//////////////////////////////////////////////////
-  static Future<void> supprimerRecette(int id) async {
+  static Future<bool> supprimerRecette(int id) async {
     if (id == null) {
       throw Exception('L\'identifiant de la recette est invalide.');
     }
@@ -145,13 +145,16 @@ class HttpUploadService {
 
       if (response.statusCode == 200) {
         print('Recette supprimée avec succès.');
+        return true;
       } else {
         print(
             'Erreur lors de la suppression de la recette: ${response.statusCode}');
+        return true;
       }
     } catch (error) {
       print('Erreur lors de la suppression de la recette: $error');
     }
+    return false;
   }
 
 //////////////////////////////////######################################################//////////////////////////////////////////////
@@ -251,7 +254,7 @@ class HttpUploadService {
       final response = await http.get(Uri.parse('$apiUrl?$queryParams'));
 
       if (response.statusCode == 200) {
-        List<dynamic> data = json.decode(response.body);
+        List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         List<Recette> recettes =
             data.map((item) => Recette.fromJson(item)).toList();
         return recettes;

@@ -42,7 +42,7 @@ class _LoginPageState extends State<Inscription> {
       setState(() {
         _image = File(pickedFile.path);
       });
-      // Afficher un signalement indiquant que la photo a été prise en compte
+      // Afficher un signalement indiquant que la photo a été prise éen compte
       const snackBar = SnackBar(
         content: Text('Photo prise en compte'),
         duration: Duration(seconds: 2),

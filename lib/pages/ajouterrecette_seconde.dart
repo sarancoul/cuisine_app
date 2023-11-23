@@ -3,6 +3,7 @@ import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/Service/Ingredient_Service.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
+import 'package:flutte_cuisine/pages/profil.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -95,6 +96,7 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                           ),
                         ],
                       ),
+                      const Text("Total prix moyen"),
                       Container(
                         // width: 400,
                         // padding: const EdgeInsets.all(100),
@@ -175,15 +177,17 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                       if (widget.recette.id != null) {
                         print("je vais updater la recette");
                         RecetteService.updateRecette(recette: widget.recette);
+                        Navigator.pop(context);
                       } else {
                         HttpUploadService.addAddRecette(
                             context: context, recette: widget.recette);
                       }
-                      //// //
-                      //uploadFile(widget.recette.photo);
-                      //HttpUploadService.addImage(widget.recette.photo);
-                      // upload(widget.recette.photo);
                       setState(() {});
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Profil(),
+                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,

@@ -1,3 +1,5 @@
+import 'package:flutte_cuisine/Dashbord/dashboard.dart';
+import 'package:flutte_cuisine/Dashbord/page_connexion.dart';
 import 'package:flutte_cuisine/pages/accueil.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette.dart';
 import 'package:flutte_cuisine/pages/inscription.dart';
@@ -31,8 +33,12 @@ class MyApp extends StatelessWidget {
         '/LoginPage': (context) => const LoginPage(),
         '/accueil': (context) => const Accueil(),
         '/Profil': (context) => const Profil(),
-        '/ahgh': (context) =>  AjouterRecette(),
+        '/AjouterRecette': (context) => AjouterRecette(),
         '/': (context) => const Navigation(),
+        '/Login': (context) => const Login(),
+        '/Dashboard': (context) => const DashboardPage(
+              title: 'Dashboard',
+            ),
       },
     );
   }

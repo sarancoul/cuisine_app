@@ -21,13 +21,16 @@ class CardRecette extends StatefulWidget {
 }
 
 class _CardRecetteState extends State<CardRecette> {
-  
   @override
   Widget build(BuildContext context) {
     var myrecette = widget.recette;
     return Card(
       color: const Color.fromARGB(255, 255, 255, 255),
-      elevation: 10,
+      elevation: 20,
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(35), // Ajustez le rayon de la bordure ici
+      ),
       child: Column(
         children: [
           InkWell(
@@ -54,7 +57,9 @@ class _CardRecetteState extends State<CardRecette> {
                 Text(
                   widget.recette.nom,
                   style: const TextStyle(
-                      color: secondaryColor, fontWeight: FontWeight.bold),
+                      color: secondaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                 ),
                 Visibility(
                   visible: widget.show,
@@ -66,12 +71,12 @@ class _CardRecetteState extends State<CardRecette> {
               ],
             ),
           ),
-          SizedBox( 
+          SizedBox(
             height: 40,
             child: Visibility(
               visible: widget.show,
               child: RatingBar(
-                itemSize: 30,
+                itemSize: 35,
                 initialRating: myrecette.points,
                 direction: Axis.horizontal,
                 allowHalfRating: true,
