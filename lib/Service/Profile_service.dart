@@ -17,9 +17,9 @@ class ServicePro extends StatefulWidget {
 
 Future<void> showRecipeDescriptionDialog(
     BuildContext context, bool editable, Recette recette) async {
-  String description = recette.description;
+  String description = recette.description!;
   String imageAsset = recette.photo;
-  String recipeName = recette.nom;
+  String recipeName = recette.nom!;
   List<Ingredient>? ingredientList = recette.ingredientList;
   VideoPlayerController controllerVideo =
       VideoPlayerController.networkUrl(Uri.parse(apiVideoUrl + recette.video));
@@ -32,6 +32,7 @@ Future<void> showRecipeDescriptionDialog(
     context: context,
     //barrierDismissible: true,
     builder: (BuildContext context) {
+      var prixMoyen;
       return AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -156,17 +157,33 @@ Future<void> showRecipeDescriptionDialog(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(ingredient.nom,
+                                    Text(". ${ingredient.nom}",
                                         style: const TextStyle(
-                                            fontSize: 12, color: Colors.black)),
+                                            fontSize: 14, color: Colors.black)),
                                     Text(ingredient.prix,
                                         style: const TextStyle(
                                             fontSize: 12, color: Colors.black)),
                                   ],
                                 ),
-                              const Text(
-                                "",
-                                style: TextStyle(color: secondaryColor),
+                              FutureBuilder<double>(
+                                future: calculerPrixMoyen(ingredientList),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return const Text("Erreur de calcul");
+                                  } else {
+                                    double prixMoyen = snapshot.data ?? 0.0;
+                                    return Text(
+                                      "Prix moyen des condiments : ${prixMoyen.toString()} Fcfa",
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: secondaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -357,6 +374,19 @@ Future<void> showRecipeDescriptionDialog(
       );
     },
   );
+}
+
+Future<double> calculerPrixMoyen(List<Ingredient> ingredients) async {
+  if (ingredients.isEmpty) {
+    return 0.0;
+  }
+
+  double totalPrix = 0.0;
+  for (var ingredient in ingredients) {
+    totalPrix += double.parse(ingredient.prix.toString());
+  }
+
+  return totalPrix / ingredients.length;
 }
 
 class _ServiceProState extends State<ServicePro> {

@@ -23,6 +23,8 @@ class _LoginPageState extends State<Inscription> {
   // ignore: non_constant_identifier_names
   TextEditingController photo_controller = TextEditingController();
 
+  String? utilisateurInscrit;
+
   @override
   void initState() {
     super.initState();
@@ -99,11 +101,13 @@ class _LoginPageState extends State<Inscription> {
                     ),
                     Column(
                       children: [
+                        
                         const Text(
                           "Connexion",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700),
                         ),
+                        
                         Visibility(
                           visible: false,
                           child: Container(
@@ -114,6 +118,7 @@ class _LoginPageState extends State<Inscription> {
                             width: 90,
                           ),
                         )
+                        
                       ],
                     )
                   ],
@@ -184,32 +189,6 @@ class _LoginPageState extends State<Inscription> {
                 ),
               ),
               const SizedBox(height: 10),
-              // Container(
-              //   margin: const EdgeInsets.symmetric(horizontal: 10),
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(20),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       IconButton(
-              //         onPressed: _pickImage,
-              //         icon: const Icon(Icons.photo_library),
-              //       ),
-              //       Expanded(
-              //         child: TextField(
-              //           controller: photo_controller,
-              //           decoration: const InputDecoration(
-              //             hintText: 'Photo',
-              //             border: InputBorder.none,
-              //             contentPadding: EdgeInsets.all(5),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
               Container(
                   margin: const EdgeInsets.all(20),
                   width: double.infinity,
@@ -253,7 +232,10 @@ class _LoginPageState extends State<Inscription> {
                             motdepasse: motdepasse,
                             photo: photo);
                         // ignore: use_build_context_synchronously
-
+                        setState(() {
+                          utilisateurInscrit = newuser
+                              .nom; 
+                        });/////// en cas de problem efface
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -281,11 +263,6 @@ class _LoginPageState extends State<Inscription> {
                             );
                           },
                         );
-
-                        // nom_controller.clear();
-                        // prenom_controller.clear();
-                        // email_controller.clear();
-                        // motdepasse_controller.clear();
                       }
                     },
                     style: ElevatedButton.styleFrom(

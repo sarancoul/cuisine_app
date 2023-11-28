@@ -55,7 +55,7 @@ class _CardRecetteState extends State<CardRecette> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.recette.nom,
+                  widget.recette.nom!,
                   style: const TextStyle(
                       color: secondaryColor,
                       fontWeight: FontWeight.bold,

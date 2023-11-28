@@ -1,5 +1,6 @@
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
+import 'package:flutte_cuisine/Service/UtilisateurService.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutte_cuisine/widgets/cart_recette.dart';
 import 'package:flutter/material.dart';
@@ -12,18 +13,25 @@ class Profil extends StatefulWidget {
 }
 
 class _ProfilState extends State<Profil> {
+  late final String utilisateur;
   // late int dishCount;
   String title = 'first page';
   String Supprimercompte = 'Supprimer compte';
   String Deconnexion = 'Deconnexion';
   late Future<List<Recette>> futurerecettes;
   late Future<int> dishCount;
+  TextEditingController photo_controller = TextEditingController();
 
+  String? utilisateurInscrit;
+  int? utilisateurId;
   @override
   void initState() {
     super.initState();
     futurerecettes = HttpUploadService().fetchRecettes();
     dishCount = HttpUploadService.getNombreTotalRecettes();
+    if (utilisateurId != null) {
+      var user = UtilisateurService.getPhotoUrl(utilisateurId!);
+    }
   }
 
   @override
@@ -97,7 +105,10 @@ class _ProfilState extends State<Profil> {
                   ),
                 ],
               ),
-              const Text("@nameprofile"),
+              Text(
+                '@$utilisateurInscrit',
+                style: const TextStyle(fontSize: 18, color: Colors.black),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -109,10 +120,16 @@ class _ProfilState extends State<Profil> {
                     builder: (context, snapshot) {
                       // print(snapshot.data.)
                       int? val = snapshot.data;
-                      return Text('$val plats');
+                      return Text(
+                        '$val recettes',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: secondaryColor),
+                      );
                     },
                   ),
-                  const Text("180 Evaluations"),
+                  // const Text("180 Evaluations"),
                 ],
               ),
               // Appel à la méthode buildRecetteGrid

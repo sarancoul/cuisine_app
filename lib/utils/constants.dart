@@ -1,3 +1,4 @@
+import 'package:flutte_cuisine/Dashbord/widgets/dynamic_wiget.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette_seconde.dart';
 import 'package:flutter/material.dart';
@@ -12,3 +13,6 @@ List<DynamicWidgetIngredient> ingredients = [];
 List<Ingredient> ingrediantList = [];
 String apiImageUrl = "http://localhost:8081/recette/images/";
 String apiVideoUrl = "http://localhost:8081/recette/videos/";
+
+bool dashboard = false;
+bool next = false;

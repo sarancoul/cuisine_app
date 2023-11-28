@@ -9,7 +9,7 @@ class Service extends StatefulWidget {
   const Service({required this.recette, Key? key}) : super(key: key);
 
   String getDescription() {
-    return recette.description;
+    return recette.description!;
   }
 
   @override

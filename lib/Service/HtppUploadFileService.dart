@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutte_cuisine/Model/Evaluation.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
-import 'package:flutte_cuisine/pages/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -88,16 +87,18 @@ class HttpUploadService {
         "photo": "profil.png",
       },
     });
+    print(request.fields['recette']);
     var response = await request.send();
     if (response.statusCode == 201) {
       print("donnée envoyé");
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Navigation(),
-          ));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const Navigation(),
+      //     ));
     } else {
       print("Donnée non envoyé");
+      print(response.statusCode);
     }
   }
 
@@ -131,31 +132,59 @@ class HttpUploadService {
     }
   }
 
-///////////////////////////#####################//////////////////////////////////////////////////
-  static Future<bool> supprimerRecette(int id) async {
-    if (id == null) {
-      throw Exception('L\'identifiant de la recette est invalide.');
-    }
-
-    const String baseUrl = 'http://localhost:8081/recette/delete';
-    final String deleteRecetteUrl = '$baseUrl/$id';
+  static Future<List<Recette>> fetchAllRecettes() async {
+    String baseUrl = 'http://localhost:8081/recette';
+    String getRecetteUrl = '$baseUrl/all';
 
     try {
-      final response = await http.delete(Uri.parse(deleteRecetteUrl));
-
+      print(Uri.parse(getRecetteUrl));
+      final response = await http.get(Uri.parse(getRecetteUrl));
+      List<Recette> recettes = [];
+      print(response.body);
       if (response.statusCode == 200) {
-        print('Recette supprimée avec succès.');
-        return true;
+        List<dynamic> jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        // print("j'seuis la");
+        try {
+          recettes = jsonData.map((data) => Recette.fromJson(data)).toList();
+        } catch (e) {
+          print(e.toString());
+        }
+
+        return recettes;
+        //  jsonData.map((data) => Recette.fromJson(data)).toList();
       } else {
-        print(
-            'Erreur lors de la suppression de la recette: ${response.statusCode}');
-        return true;
+        throw Exception(
+            'Erreur lors de la récupération des recettes: ${response.statusCode}');
       }
     } catch (error) {
-      print('Erreur lors de la suppression de la recette: $error');
+      throw Exception('Erreur lors de la récupération des recettes: $error');
     }
-    return false;
   }
+///////////////////////////#####################//////////////////////////////////////////////////
+  // static Future<bool> supprimerRecette(int id) async {
+  //   if (id == null) {
+  //     throw Exception('L\'identifiant de la recette est invalide.');
+  //   }
+
+  //   const String baseUrl = 'http://localhost:8081/recette/delete';
+  //   final String deleteRecetteUrl = '$baseUrl/$id';
+
+  //   try {
+  //     final response = await http.delete(Uri.parse(deleteRecetteUrl));
+
+  //     if (response.statusCode == 200) {
+  //       print('Recette supprimée avec succès.');
+  //       return true;
+  //     } else {
+  //       print(
+  //           'Erreur lors de la suppression de la recette: ${response.statusCode}');
+  //       return true;
+  //     }
+  //   } catch (error) {
+  //     print('Erreur lors de la suppression de la recette: $error');
+  //   }
+  //   return false;
+  // }
 
 //////////////////////////////////######################################################//////////////////////////////////////////////
   Future<List<Recette>> rechercher(String nom) async {
@@ -267,4 +296,6 @@ class HttpUploadService {
       return [];
     }
   }
+
+  ////////////////////////############prix moyen des ingrédients################/////////////////////////////////////
 }

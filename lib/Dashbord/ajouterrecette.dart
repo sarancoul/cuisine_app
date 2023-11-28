@@ -1,22 +1,24 @@
+import 'package:flutte_cuisine/Dashbord/ajouterrecette_seconde.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
-import 'package:flutte_cuisine/pages/ajouterrecette_seconde.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class AjouterRecette extends StatefulWidget {
+class AjouterRecetteDash extends StatefulWidget {
   Recette? recette;
-  AjouterRecette({super.key, this.recette});
+  AjouterRecetteDash({super.key, this.recette});
 
   @override
-  State<AjouterRecette> createState() => _AjouterRecetteState();
+  State<AjouterRecetteDash> createState() => _AjouterRecetteDashState();
 }
 
-class _AjouterRecetteState extends State<AjouterRecette> {
+class _AjouterRecetteDashState extends State<AjouterRecetteDash> {
   List ingredients = [1];
   bool initReader = true;
   var _image;
@@ -41,8 +43,13 @@ class _AjouterRecetteState extends State<AjouterRecette> {
 
   @override
   Widget build(BuildContext context) {
-    Recette? recetteOld = widget.recette;
-    if (recetteOld != null && _image == null) {
+    Recette? recetteOld = context.read<UtilProvider>().recette;
+    print("building");
+    print(recetteOld.description);
+    print(recetteOld != null);
+    // ignore: unnecessary_null_comparison
+    if (_image == null && recetteOld != null && recetteOld.nom != null) {
+      print("building checking");
       _nameRecette.text = recetteOld.nom!;
       _descriptionRecette.text = recetteOld.description!;
       _image = apiImageUrl + recetteOld.photo;
@@ -52,6 +59,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
       //_controller =
     }
 
+    print("building 2");
     _controller = _video is String
         ? VideoPlayerController.networkUrl(Uri.parse(_video))
         : Image.asset("assets/images/iconeVideo.png");
@@ -187,7 +195,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                                 child: InkWell(
                                   onTap: () => editImg
                                       ? HttpUploadService.updateImage(
-                                          photoName: recetteOld!.photo,
+                                          photoName: recetteOld.photo,
                                           image: _image)
                                       : showOptions(),
                                   child: Icon(
@@ -241,7 +249,7 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                                       child: InkWell(
                                         onTap: () => editVideo
                                             ? HttpUploadService.updateVideo(
-                                                videoName: recetteOld!.video,
+                                                videoName: recetteOld.video,
                                                 video: _video)
                                             : showOptions(img: false),
                                         child: Icon(
@@ -268,30 +276,35 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                               print("----------------------");
                               print(_nameRecette.text);
                               print(_image);
-                              print(recetteOld?.id);
+                              print(recetteOld.id);
                               // RecetteService(recette:
                               recette = Recette(
-                                 // id: recetteOld!.id,
+                                  // id: recetteOld!.id,
                                   nom: _nameRecette.text,
                                   description: _descriptionRecette.text,
                                   photo: _image,
                                   video: _video!,
                                   ingredientList: _ingredientList);
-                                if(recetteOld?.id != null){
-                                  recette.id = recetteOld?.id;
-                                }
+                              if (recetteOld.id != null) {
+                                recette.id = recetteOld.id;
+                              }
                               debugPrint('la recette : ${recette.description}');
                               //);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AjouterRecetteSecondePage(
-                                            recette: recette),
-                                  ));
-                              // setState(() {
-                              //   ingredients.add(ajouterIngredient(1));
-                              // });
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           AjouterRecetteDashSecondePage(
+                              //               recette: recette),
+                              //     ));
+
+                              print("j'appuie sur suivant");
+                              print(recette.toJson());
+                              context.read<UtilProvider>().setRecette(recette);
+                              context
+                                  .read<UtilProvider>()
+                                  .setdashboardCurrentIndex(UtilProvider().getIndex(AjouterRecetteSecondePageDash));
+                              // widget.changePage(recette);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,

@@ -60,8 +60,6 @@ class UtilisateurService {
     throw Exception('Impossible de modifier l\'utilisateur : ${response.statusCode}');
   }
 }
-
-
   //fonction, pour la suppression
  static Future<void> supprimerUtilisateur(int id) async {
   final response = await http.delete(Uri.parse('$apiUrl/delete/$id'));
@@ -74,5 +72,10 @@ class UtilisateurService {
     throw Exception('Impossible de supprimer l\'utilisateur : ${response.statusCode}');
   }
 }
+
+static String getPhotoUrl(int userId) {
+  return '$apiUrl/photo/$userId';
+}
+
 
 }

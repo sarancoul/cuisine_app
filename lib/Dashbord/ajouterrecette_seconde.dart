@@ -1,23 +1,25 @@
+import 'package:flutte_cuisine/Dashbord/recetteListedash.dart';
 import 'package:flutte_cuisine/Dashbord/widgets/dynamic_wiget.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
-import 'package:flutte_cuisine/Service/Ingredient_Service.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
-import 'package:flutte_cuisine/pages/profil.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class AjouterRecetteSecondePage extends StatefulWidget {
-  Recette recette;
-  AjouterRecetteSecondePage({super.key, required this.recette});
+class AjouterRecetteSecondePageDash extends StatefulWidget {
+  const AjouterRecetteSecondePageDash({super.key});
 
   @override
-  State<AjouterRecetteSecondePage> createState() =>
-      _AjouterRecetteSecondePageState();
+  State<AjouterRecetteSecondePageDash> createState() =>
+      _AjouterRecetteSecondePageDashState();
 }
 
-class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
+class _AjouterRecetteSecondePageDashState
+    extends State<AjouterRecetteSecondePageDash> {
+  Recette? recette;
   //final HttpUploadService _httpUploadService = HttpUploadService();
 
   //@override
@@ -33,9 +35,9 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.recette.ingredientList);
-    if (widget.recette.ingredientList != null) {
-      ingrediantList = widget.recette.ingredientList!;
+    recette = context.read<UtilProvider>().recette;
+    if (recette?.ingredientList != null) {
+      ingrediantList = recette!.ingredientList!;
       setIngredient();
       // setIngredient(widget.recette.ingredientList)
       //getIngredientData();
@@ -168,26 +170,26 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
                     onPressed: () {
-                      debugPrint(widget.recette.description.toString());
+                      debugPrint(recette?.toString());
                       print("je vais initier l'envoi");
-                      widget.recette.ingredientList = getIngredientData();
-                      print("L'id de la recette =>${widget.recette.id}");
+                      recette?.ingredientList = getIngredientData();
+                      print("L'id de la recette =>${recette?.id}");
                       //ImageService.uploadFile(widget.recette.photo);
                       print("Envoi de la recette");
-                      if (widget.recette.id != null) {
+                      if (recette!.id != null) {
                         print("je vais updater la recette");
-                        RecetteService.updateRecette(recette: widget.recette);
-                        Navigator.pop(context);
+                        RecetteService.updateRecette(recette: recette!);
+                        context.read<UtilProvider>().setRecette(Recette());
+                        context.read<UtilProvider>().setdashboardCurrentIndex(
+                            UtilProvider().getIndex(RecetteAjout));
                       } else {
+                        print("ajout");
                         HttpUploadService.addAddRecette(
-                            context: context, recette: widget.recette);
+                            context: context, recette: recette!);
+                        context.read<UtilProvider>().setRecette(Recette());
+                        context.read<UtilProvider>().setdashboardCurrentIndex(
+                            UtilProvider().getIndex(RecetteAjout));
                       }
-                      setState(() {});
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Profil(),
-                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -239,7 +241,7 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
       d.prixController.text = ingrediantList[i].prix;
       ingredients.add(d);
     }
-    widget.recette.ingredientList = null;
+    recette!.ingredientList = null;
     setState(() {});
   }
 
@@ -308,4 +310,3 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
   //   );
   // }
 }
-

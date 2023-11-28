@@ -1,3 +1,4 @@
+import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:http/http.dart' as http;
 class IngredientService {
   final String baseUrl;
