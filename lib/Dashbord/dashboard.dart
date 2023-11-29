@@ -63,19 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     _selectedIndex = Provider.of<UtilProvider>(context).dashboardCurrentIndex;
     _widgetOptions = Provider.of<UtilProvider>(context).widgetOptions;
-    // _widgetOptions = <Widget>[
-    //   const AccueilDashboard(),
-    //   const ProfilePage(),
-    //   const RecetteAjout(),
-    //   !nextPage
-    //       ? AjouterRecette(
-    //           changePage: changePage,
-    //         )
-    //       : AjouterRecetteSecondePage(
-    //           changePage: changePage,
-    //           recette: recette,
-    //         )
-    // ];
+
     return Scaffold(
       body: Row(
         children: [

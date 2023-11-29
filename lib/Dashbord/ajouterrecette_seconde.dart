@@ -167,7 +167,7 @@ class _AjouterRecetteSecondePageDashState
                 ),
                 Container(
                   margin: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.2,
                   child: ElevatedButton(
                     onPressed: () {
                       debugPrint(recette?.toString());

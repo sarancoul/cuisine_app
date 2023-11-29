@@ -1,6 +1,7 @@
 import 'package:flutte_cuisine/Service/Ingredient_Service.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DynamicWidgetIngredient extends StatefulWidget {
   // List ingredients;
@@ -71,6 +72,8 @@ class _DynamicWidgetIngredientState extends State<DynamicWidgetIngredient> {
                   ),
                   child: TextField(
                     controller: widget.prixController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(
                       hintText: 'Prix',
                       border: InputBorder.none,
