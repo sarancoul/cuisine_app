@@ -51,7 +51,9 @@ class HttpUploadService {
   ////////////////////////////#########################################/////////////////////////////////////////////
 
   static Future<void> addAddRecette(
-      {required BuildContext context, required Recette recette}) async {
+      {required BuildContext context,
+      required Recette recette,
+      required utilisateur}) async {
     String addimageUrl = 'http://localhost:8081/recette/upload';
     var request = http.MultipartRequest('POST', Uri.parse(addimageUrl));
     List jsonIngredientList = recette.ingredientList!
@@ -78,14 +80,7 @@ class HttpUploadService {
       'photo': "",
       'videoData': "",
       'ingredients': jsonIngredientList,
-      "utilisateur": {
-        "id": 1,
-        "nom": "coulibaly",
-        "prenom": "Saran",
-        "email": "sc523644@gmail.com",
-        "motdepasse": "445566",
-        "photo": "profil.png",
-      },
+      "utilisateur": {'id': '2'}
     });
     print(request.fields['recette']);
     var response = await request.send();
@@ -260,6 +255,9 @@ class HttpUploadService {
       throw Exception('Échec de la récupération du nombre total de recettes');
     }
   }
+
+  ///////////////////////###############Fonction pour avoir le nombre total des utilisateurs ###########/////////////////
+
   //////////////////////////////###########Fonction recherche par ingredient###########/////////////////////
 
   Future<List<Recette>> searchRecipes(String ingredientNames) async {
@@ -298,4 +296,14 @@ class HttpUploadService {
   }
 
   ////////////////////////############prix moyen des ingrédients################/////////////////////////////////////
+  static Future<int> getNombreTotalUser() async {
+    final url = Uri.parse('http://localhost:8081/user/totalUsers');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return int.parse(response.body);
+    } else {
+      throw Exception(
+          'Erreur lors de la récupération du nombre d\'utilisateurs');
+    }
+  }
 }

@@ -8,15 +8,18 @@ class Recette {
   var video;
   List<Ingredient>? ingredientList;
   double points;
+  DateTime? dateAjout;
 
-  Recette(
-      {this.id,
-      this.ingredientList,
-      this.nom,
-      this.description,
-      this.photo,
-      this.points = 0,
-      this.video});
+  Recette({
+    this.id,
+    this.ingredientList,
+    this.nom,
+    this.description,
+    this.photo,
+    this.points = 0,
+    this.video,
+    this.dateAjout,
+  });
 
   factory Recette.fromJson(Map<String, dynamic> json) {
     print(json['evaluationPoint']);
@@ -27,6 +30,7 @@ class Recette {
         photo: json['photo'] ?? '',
         video: json['videoData'] ?? '',
         points: double.parse(json['evaluationPoint'].toString()),
+        dateAjout: DateTime.parse(json['dateAjout']),
         ingredientList: List<Ingredient>.from(
           json['ingredients']
                   .map((ingredient) => Ingredient.fromJson(ingredient)) ??
@@ -42,6 +46,7 @@ class Recette {
       'photo': photo,
       'videoData': video,
       'evaluationPoint': points,
+      'date_ajout': dateAjout?.toIso8601String(),
       //'ingredients': ingredientList.map((ingredient) => ingredient.toJson()).toList(),
     };
   }

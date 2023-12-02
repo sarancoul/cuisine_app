@@ -166,7 +166,7 @@ Future<void> showRecipeDescriptionDialog(
                                   ],
                                 ),
                               FutureBuilder<double>(
-                                future: calculerPrixMoyen(ingredientList),
+                                future: additionnerPrix(ingredientList),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -174,13 +174,14 @@ Future<void> showRecipeDescriptionDialog(
                                   } else if (snapshot.hasError) {
                                     return const Text("Erreur de calcul");
                                   } else {
-                                    double prixMoyen = snapshot.data ?? 0.0;
+                                    double totalPrix = snapshot.data ?? 0.0;
                                     return Text(
-                                      "Prix moyen des condiments : ${prixMoyen.toString()} Fcfa",
+                                      "Total des prix des condiments : ${totalPrix.toString()} Fcfa",
                                       style: const TextStyle(
-                                          fontSize: 16,
-                                          color: secondaryColor,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        color: secondaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     );
                                   }
                                 },
@@ -376,17 +377,25 @@ Future<void> showRecipeDescriptionDialog(
   );
 }
 
-Future<double> calculerPrixMoyen(List<Ingredient> ingredients) async {
-  if (ingredients.isEmpty) {
-    return 0.0;
-  }
+// Future<double> calculerPrixMoyen(List<Ingredient> ingredients) async {
+//   if (ingredients.isEmpty) {
+//     return 0.0;
+//   }
 
+//   double totalPrix = 0.0;
+//   for (var ingredient in ingredients) {
+//     totalPrix += double.parse(ingredient.prix.toString());
+//   }
+
+//   return totalPrix / ingredients.length;
+// }
+
+Future<double> additionnerPrix(List<Ingredient> ingredients) async {
   double totalPrix = 0.0;
   for (var ingredient in ingredients) {
     totalPrix += double.parse(ingredient.prix.toString());
   }
-
-  return totalPrix / ingredients.length;
+  return totalPrix;
 }
 
 class _ServiceProState extends State<ServicePro> {

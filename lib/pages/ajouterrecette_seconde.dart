@@ -2,11 +2,12 @@ import 'package:flutte_cuisine/Dashbord/widgets/dynamic_wiget.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
-import 'package:flutte_cuisine/Service/Ingredient_Service.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
 import 'package:flutte_cuisine/pages/profil.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AjouterRecetteSecondePage extends StatefulWidget {
   Recette recette;
@@ -180,7 +181,10 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                         Navigator.pop(context);
                       } else {
                         HttpUploadService.addAddRecette(
-                            context: context, recette: widget.recette);
+                            context: context,
+                            recette: widget.recette,
+                            utilisateur:
+                                context.read<UtilProvider>().utilisateur);
                       }
                       setState(() {});
                       Navigator.push(
@@ -308,4 +312,3 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
   //   );
   // }
 }
-

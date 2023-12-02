@@ -132,7 +132,7 @@ class _ProfilState extends State<Profil> {
                   // const Text("180 Evaluations"),
                 ],
               ),
-              // Appel à la méthode buildRecetteGrid
+              
               FutureBuilder<List<Recette>>(
                 future: futurerecettes,
                 builder: (context, snapshot) {

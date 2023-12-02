@@ -169,7 +169,7 @@ class _AjouterRecetteSecondePageDashState
                   margin: const EdgeInsets.all(10),
                   width: MediaQuery.of(context).size.width * 0.2,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       debugPrint(recette?.toString());
                       print("je vais initier l'envoi");
                       recette?.ingredientList = getIngredientData();
@@ -178,14 +178,17 @@ class _AjouterRecetteSecondePageDashState
                       print("Envoi de la recette");
                       if (recette!.id != null) {
                         print("je vais updater la recette");
-                        RecetteService.updateRecette(recette: recette!);
+                        await RecetteService.updateRecette(recette: recette!);
                         context.read<UtilProvider>().setRecette(Recette());
                         context.read<UtilProvider>().setdashboardCurrentIndex(
                             UtilProvider().getIndex(RecetteAjout));
                       } else {
                         print("ajout");
-                        HttpUploadService.addAddRecette(
-                            context: context, recette: recette!);
+                        await HttpUploadService.addAddRecette(
+                            context: context,
+                            recette: recette!,
+                            utilisateur:
+                                context.read<UtilProvider>().utilisateur);
                         context.read<UtilProvider>().setRecette(Recette());
                         context.read<UtilProvider>().setdashboardCurrentIndex(
                             UtilProvider().getIndex(RecetteAjout));

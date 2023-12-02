@@ -155,7 +155,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: const Icon(
-                      FontAwesomeIcons.mortarPestle,
+                      FontAwesomeIcons.plus,
                       color: Colors.white,
                     ),
                     tileColor:

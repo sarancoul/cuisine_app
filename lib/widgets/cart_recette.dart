@@ -29,7 +29,7 @@ class _CardRecetteState extends State<CardRecette> {
       elevation: 20,
       shape: RoundedRectangleBorder(
         borderRadius:
-            BorderRadius.circular(35), // Ajustez le rayon de la bordure ici
+            BorderRadius.circular(35), 
       ),
       child: Column(
         children: [

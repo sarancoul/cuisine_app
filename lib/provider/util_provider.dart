@@ -4,6 +4,7 @@ import 'package:flutte_cuisine/Dashbord/ajouterrecette_seconde.dart';
 import 'package:flutte_cuisine/Dashbord/recetteListedash.dart';
 import 'package:flutte_cuisine/Dashbord/utilisateur.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 import 'package:flutter/material.dart';
 
 class UtilProvider with ChangeNotifier {
@@ -17,11 +18,20 @@ class UtilProvider with ChangeNotifier {
     const AjouterRecetteSecondePageDash()
   ];
 
+  Utilisateur _utilisateur = const Utilisateur();
+
+  Utilisateur get utilisateur => _utilisateur;
+
   int get dashboardCurrentIndex => _dashCurrentIndex;
 
   Recette get recette => _recette;
 
   List<Widget> get widgetOptions => _widgetOptions;
+
+  void setUtilisateur(Utilisateur utilisateur) {
+    _utilisateur = utilisateur;
+    notifyListeners();
+  }
 
   void setRecette(Recette recette) {
     _recette = recette;

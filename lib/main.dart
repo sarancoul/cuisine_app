@@ -1,6 +1,5 @@
 import 'package:flutte_cuisine/Dashbord/accueil.dart';
 import 'package:flutte_cuisine/Dashbord/dashboard.dart';
-import 'package:flutte_cuisine/Dashbord/page_connexion.dart';
 import 'package:flutte_cuisine/Dashbord/recetteListedash.dart';
 import 'package:flutte_cuisine/pages/accueil.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette.dart';
@@ -27,6 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //  context.read<UtilProvider>().setUtilisateur(const Utilisateur(id: 2));
     return MaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
@@ -37,13 +37,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/Inscription': (context) => const Inscription(),
-        '/LoginPage': (context) => const LoginPage(),
+        '/': (context) => const LoginPage(),
         '/accueil': (context) => const Accueil(),
         '/Profil': (context) => const Profil(),
         '/AjouterRecette': (context) => AjouterRecette(),
-        '/Navigation': (context) => const Navigation(),
-        '/Login': (context) => const Login(),
-        '/': (context) => const DashboardPage(
+        '/': (context) => const Navigation(),
+        '/LoginPage': (context) => const LoginPage(),
+        '/inscription': (context) => const Inscription(),
+        '/DashboardPage': (context) => const DashboardPage(
               title: 'Dashboard',
             ),
         '/AccueilDashboard': (context) => const AccueilDashboard(),

@@ -179,9 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundImage: AssetImage("assets/images/mage2.png"),
         ),
       )),
-      DataCell(Text(utilisateur.prenom)),
+      DataCell(Text(utilisateur.prenom!)),
       DataCell(Text(utilisateur.nom!)),
-      DataCell(Text(utilisateur.email)),
+      DataCell(Text(utilisateur.email!)),
       DataCell(Row(
         children: [
           InkWell(
