@@ -266,4 +266,203 @@ class _RecetteAjoutState extends State<RecetteAjout> {
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   print("voici la taille");
+  //   print(recettes.length);
+  //   return Scaffold(
+  //     backgroundColor: Colors.grey,
+  //     body: SizedBox(
+  //       width: MediaQuery.of(context).size.width,
+  //       child: Row(
+  //         children: [
+  //           Expanded(
+  //             child: Column(children: [
+  //               //header
+  //               Container(
+  //                 // width: 500,
+  //                 margin: const EdgeInsets.all(12),
+  //                 child: DataTable(
+  //                     columnSpacing: 30,
+  //                     decoration: const BoxDecoration(),
+  //                     columns: const [
+  //                       DataColumn(
+  //                         label: Text(
+  //                           "Photo",
+  //                           style: TextStyle(
+  //                             color: secondaryColor,
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       DataColumn(
+  //                         label: Text(
+  //                           "Nom",
+  //                           style: TextStyle(
+  //                             color: secondaryColor,
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       DataColumn(
+  //                         label: Text(
+  //                           "Descriptions",
+  //                           style: TextStyle(
+  //                             color: secondaryColor,
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       DataColumn(
+  //                         label: Text(
+  //                           "Actions",
+  //                           style: TextStyle(
+  //                             color: secondaryColor,
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                     rows:
+  //                         //recettes.map((rec) => dataRow(rec)).toList(),
+
+  //                         // for (Recette rec in recettes)
+  //                         recettes.map((e) {
+  //                       return const DataRow(cells: [
+  //                         DataCell(Text("dfs")),
+  //                         DataCell(Text("dfs")),
+  //                         DataCell(Text("dfs")),
+  //                         DataCell(Text("dfs"))
+  //                       ]);
+  //                     }).toList()),
+  //               ),
+  //             ]),
+  //           ),
+  //           Container(
+  //             margin: const EdgeInsets.all(12),
+  //             width: MediaQuery.of(context).size.width * .3,
+  //             decoration: BoxDecoration(
+  //               color: const Color.fromARGB(255, 235, 225, 225),
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Padding(
+  //               padding: const EdgeInsets.all(13),
+  //               child: recette != null
+  //                   ? RecetteDetailPage(
+  //                       recette: recette,
+  //                     )
+  //                   : Container(),
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // DataRow dataRow(Recette recette) {
+  //   return DataRow(cells: [
+  //     DataCell(
+  //       SizedBox(
+  //         width: 30,
+  //         child: CircleAvatar(
+  //           radius: 30.0,
+  //           backgroundColor: Colors.white,
+  //           backgroundImage: recette.photo != null
+  //               ? FadeInImage.assetNetwork(
+  //                   width: double.infinity,
+  //                   height: MediaQuery.of(context).size.width * 0.3,
+  //                   placeholder: "assets/images/iconeImage.png",
+  //                   image: apiImageUrl + recette.photo,
+  //                   imageErrorBuilder: (context, error, stackTrace) {
+  //                     return Image.asset("assets/images/iconeImage.png");
+  //                   },
+  //                 ).image
+  //               : Image.asset("assets/images/zame.png").image,
+  //         ),
+  //       ),
+  //     ),
+  //     DataCell(Text(recette.nom!)),
+  //     DataCell(SizedBox(
+  //       width: 300,
+  //       child: Text(
+  //         recette.description!,
+  //         style: const TextStyle(
+  //           overflow: TextOverflow.ellipsis,
+  //           color: Colors.black,
+  //           fontSize: 20,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     )),
+  //     DataCell(
+  //       SizedBox(
+  //         width: 80,
+  //         child: Row(
+  //           children: [
+  //             InkWell(
+  //               onTap: () {
+  //                 context.read<UtilProvider>().setRecette(recette);
+  //                 context.read<UtilProvider>().setdashboardCurrentIndex(
+  //                     UtilProvider().getIndex(AjouterRecetteDash));
+  //               },
+  //               child: const Icon(
+  //                 FontAwesomeIcons.penToSquare,
+  //                 color: primaryColor,
+  //               ),
+  //             ),
+  //             const SizedBox(
+  //               width: 5,
+  //             ),
+  //             ElevatedButton(
+  //               onPressed: () {
+  //                 showDialog(
+  //                   context: context,
+  //                   builder: (BuildContext context) {
+  //                     return AlertDialog(
+  //                       title: const Text('Confirmation de suppression'),
+  //                       content: const Text('Voulez-vous vraiment supprimer?'),
+  //                       actions: <Widget>[
+  //                         TextButton(
+  //                           child: const Text('Non'),
+  //                           onPressed: () {
+  //                             Navigator.of(context).pop();
+  //                           },
+  //                         ),
+  //                         TextButton(
+  //                           child: const Text('Oui'),
+  //                           onPressed: () async {
+  //                             bool result =
+  //                                 await RecetteService.supprimerRecette(
+  //                                     recette.id!);
+  //                             if (result) {
+  //                               print("je vais remover");
+  //                               recettes.removeAt(recettes.indexOf(recette));
+  //                               setState(() {});
+  //                               //
+  //                               Navigator.of(context).pop();
+  //                             }
+  //                           },
+  //                         ),
+  //                       ],
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //               child: const Icon(
+  //                 FontAwesomeIcons.trash,
+  //                 color: secondaryColor,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   ]);
+  // }
 }

@@ -132,7 +132,6 @@ class _ProfilState extends State<Profil> {
                   // const Text("180 Evaluations"),
                 ],
               ),
-              
               FutureBuilder<List<Recette>>(
                 future: futurerecettes,
                 builder: (context, snapshot) {

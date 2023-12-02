@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutte_cuisine/Dashbord/serviceDashbord.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
@@ -393,7 +392,7 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
                                               children: [
                                                 Text(recette.nom ?? ''),
                                                 Text(
-                                                  " Prix moyen des condiments ${getPrixMoyen(recette.ingredientList!)} Fcfa",
+                                                  " Prix moyen des condiments ${getPrixTotal(recette.ingredientList!)} Fcfa",
                                                   style: const TextStyle(
                                                       color: secondaryColor,
                                                       fontSize: 14,
@@ -409,58 +408,58 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
                                 ),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 50),
-                              width: 200,
-                              height: 240,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: PieChart(
-                                  PieChartData(
-                                    sectionsSpace: 0,
-                                    centerSpaceRadius: 40,
-                                    pieTouchData: PieTouchData(
-                                      touchCallback: (p0, p1) {
-                                        setState(() {
-                                          // print(p1?.touchedSection
-                                          //     ?.touchedSectionIndex);
-                                          // print("i touched");
-                                        });
-                                      },
-                                    ),
-                                    sections: [
-                                      PieChartSectionData(
-                                        color: Colors.blue,
-                                        value: 40,
-                                        title: '40%',
-                                        radius: 50,
-                                        titleStyle: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      PieChartSectionData(
-                                        color: Colors.green,
-                                        value: 30,
-                                        title: '30%',
-                                        radius: 50,
-                                        titleStyle: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      PieChartSectionData(
-                                        color: Colors.orange,
-                                        value: 30,
-                                        title: '30%',
-                                        radius: 50,
-                                        titleStyle: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Container(
+                            //   margin: const EdgeInsets.only(top: 50),
+                            //   width: 200,
+                            //   height: 240,
+                            //   child: Align(
+                            //     alignment: Alignment.center,
+                            //     child: PieChart(
+                            //       PieChartData(
+                            //         sectionsSpace: 0,
+                            //         centerSpaceRadius: 40,
+                            //         pieTouchData: PieTouchData(
+                            //           touchCallback: (p0, p1) {
+                            //             setState(() {
+                            //               // print(p1?.touchedSection
+                            //               //     ?.touchedSectionIndex);
+                            //               // print("i touched");
+                            //             });
+                            //           },
+                            //         ),
+                            //         sections: [
+                            //           PieChartSectionData(
+                            //             color: Colors.blue,
+                            //             value: 40,
+                            //             title: '40%',
+                            //             radius: 50,
+                            //             titleStyle: const TextStyle(
+                            //                 fontSize: 16,
+                            //                 fontWeight: FontWeight.bold),
+                            //           ),
+                            //           PieChartSectionData(
+                            //             color: Colors.green,
+                            //             value: 30,
+                            //             title: '30%',
+                            //             radius: 50,
+                            //             titleStyle: const TextStyle(
+                            //                 fontSize: 16,
+                            //                 fontWeight: FontWeight.bold),
+                            //           ),
+                            //           PieChartSectionData(
+                            //             color: Colors.orange,
+                            //             value: 30,
+                            //             title: '30%',
+                            //             radius: 50,
+                            //             titleStyle: const TextStyle(
+                            //                 fontSize: 16,
+                            //                 fontWeight: FontWeight.bold),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       )
@@ -475,16 +474,13 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
     );
   }
 
-  double getPrixMoyen(List<Ingredient> ingredients) {
-    if (ingredients.isEmpty) {
-      return 0.0;
-    }
-
+  double getPrixTotal(List<Ingredient> ingredients) {
     double totalPrix = 0.0;
+
     for (var ingredient in ingredients) {
       totalPrix += double.parse(ingredient.prix.toString());
     }
 
-    return totalPrix / ingredients.length;
+    return totalPrix;
   }
 }
