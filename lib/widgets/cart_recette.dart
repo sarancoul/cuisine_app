@@ -28,8 +28,7 @@ class _CardRecetteState extends State<CardRecette> {
       color: const Color.fromARGB(255, 255, 255, 255),
       elevation: 20,
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(35), 
+        borderRadius: BorderRadius.circular(35),
       ),
       child: Column(
         children: [
@@ -72,11 +71,11 @@ class _CardRecetteState extends State<CardRecette> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 20,
             child: Visibility(
               visible: widget.show,
               child: RatingBar(
-                itemSize: 35,
+                itemSize: 25,
                 initialRating: myrecette.points,
                 direction: Axis.horizontal,
                 allowHalfRating: true,

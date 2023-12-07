@@ -1,9 +1,11 @@
 import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 import 'package:flutte_cuisine/Model/authentification.dart';
 import 'package:flutte_cuisine/Service/UtilisateurService.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -56,10 +58,14 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Column(
                           children: [
-                            const Text(
-                              "Inscription",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            InkWell(
+                              onTap: () => Navigator.pushReplacementNamed(
+                                  context, '/inscription'),
+                              child: const Text(
+                                "Inscription",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w700),
+                              ),
                             ),
                             Visibility(
                               visible: true,
@@ -104,7 +110,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: TextField(
                       controller: email_controller,
-                      
                       decoration: const InputDecoration(
                         hintText: 'Entrez votre email',
                         border: InputBorder.none,
@@ -122,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       // controller: email_controller,
                       controller: motdepasse_controller,
+                      obscureText: true,
                       decoration: const InputDecoration(
                         hintText: 'Mot de passe',
                         border: InputBorder.none,
@@ -141,12 +147,16 @@ class _LoginPageState extends State<LoginPage> {
 
                           try {
                             //recuperation user
+                            print(url);
                             Utilisateur usersenregistre =
                                 await UtilisateurService.authentification(
                                     url: url,
                                     authentification: authentification);
-
+                            print(url);
                             if (usersenregistre.id != null) {
+                              context
+                                  .read<UtilProvider>()
+                                  .setUtilisateur(usersenregistre);
                               if (kIsWeb) {
                                 Navigator.pushReplacementNamed(
                                     context, '/DashboardPage');

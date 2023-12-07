@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 import 'package:flutte_cuisine/Model/authentification.dart';
+import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class UtilisateurService {
-  static const apiUrl = 'http://localhost:8081/user';
+  // static const apiUrl = 'http://localhost:8081/user';
 
   static Future<Utilisateur> authentification(
       {required Authentification authentification, required String url}) async {
@@ -18,7 +19,7 @@ class UtilisateurService {
     print(response.statusCode);
     if (response.statusCode == 201 || response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      print(json);
+      print("--------------------------------------------------------");
       return Utilisateur.fromJson(json);
     } else {
       throw Exception('Utilisateur non ajouter : ${response.statusCode}');
@@ -32,8 +33,9 @@ class UtilisateurService {
     required String motdepasse,
     required String photo,
   }) async {
+    print(apiUrl);
     final response = await http.post(
-      Uri.parse('$apiUrl/create'),
+      Uri.parse('${apiUrl}user/create'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'nom': nom,
@@ -53,7 +55,7 @@ class UtilisateurService {
 
   //fonction pour la recuperation des utilisateur
   static Future<List<Utilisateur>> getAllUsers() async {
-    final response = await http.get(Uri.parse('$apiUrl/all'));
+    final response = await http.get(Uri.parse('$apiUrl/user/all'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = jsonDecode(response.body);
       return jsonData.map((json) => Utilisateur.fromJson(json)).toList();
@@ -68,7 +70,7 @@ class UtilisateurService {
   static Future<void> modifierUtilisateur(
       int id, Utilisateur utilisateur) async {
     final response = await http.put(
-      Uri.parse('$apiUrl/update/$id'),
+      Uri.parse('${apiUrl}user/update/$id'),
       headers: {"Content-Type": "application/json"},
       //body: jsonEncode(utilisateur.toJson())
     );
@@ -85,7 +87,7 @@ class UtilisateurService {
 
   //fonction, pour la suppression
   static Future<void> supprimerUtilisateur(int id) async {
-    final response = await http.delete(Uri.parse('$apiUrl/delete/$id'));
+    final response = await http.delete(Uri.parse('${apiUrl}user/delete/$id'));
 
     if (response.statusCode == 200) {
       print('Utilisateur supprimé avec succès');

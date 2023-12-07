@@ -1,4 +1,5 @@
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
+import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 
 class Recette {
   int? id;
@@ -9,6 +10,7 @@ class Recette {
   List<Ingredient>? ingredientList;
   double points;
   DateTime? dateAjout;
+  Utilisateur? utilisateur;
 
   Recette({
     this.id,
@@ -19,6 +21,7 @@ class Recette {
     this.points = 0,
     this.video,
     this.dateAjout,
+    this.utilisateur,
   });
 
   factory Recette.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,7 @@ class Recette {
         video: json['videoData'] ?? '',
         points: double.parse(json['evaluationPoint'].toString()),
         dateAjout: DateTime.parse(json['dateAjout']),
+        utilisateur: Utilisateur.fromJson(json['utilisateur']),
         ingredientList: List<Ingredient>.from(
           json['ingredients']
                   .map((ingredient) => Ingredient.fromJson(ingredient)) ??

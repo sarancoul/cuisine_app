@@ -89,4 +89,35 @@ static Future<List<Recette>> afficherrecettes() async {
 
   void initializeRecettes() {}
 
+  //////////////////////////////////#####Avoir le total des recettes admin//////////////////////////
+
+ static Future<int> getNombreTotalRecettesAdmin() async {
+    final response = await http.get(
+      Uri.parse(
+          'http://localhost:8081/recette/nombreTotalRecettes?utilisateurId=1'),
+    );
+
+    if (response.statusCode == 200) {
+      int jsonResponse = json.decode(response.body);
+
+      return jsonResponse;
+      //return jsonResponse['nombreTotalRecettes'];
+    } else {
+      print("Le nombre de recette => ERROR");
+      throw Exception('Échec de la récupération du nombre total de recettes');
+    }
+  }
+
+  
+  ////////////////////////############avoir le nombre total users################/////////////////////////////////////
+  static Future<int> getNombreTotalUser() async {
+    final url = Uri.parse('http://localhost:8081/user/totalUsers');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return int.parse(response.body);
+    } else {
+      throw Exception(
+          'Erreur lors de la récupération du nombre d\'utilisateurs');
+    }
+  }
 }

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette_seconde.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -162,12 +165,19 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
-                                  child: _image != null
-                                      ? Image.network(_image is String
-                                          ? _image
-                                          : _image!.path)
-                                      : Image.asset(
-                                          "assets/images/iconeImage.png"),
+                                  child: kIsWeb
+                                      ? _image != null
+                                          ? Image.network(_image is String
+                                              ? _image
+                                              : _image!.path)
+                                          : Image.asset(
+                                              "assets/images/iconeImage.png")
+                                      : _image != null
+                                          ? Image.file(_image is String
+                                              ? _image
+                                              : File(_image!.path))
+                                          : Image.asset(
+                                              "assets/images/iconeImage.png"),
                                 ),
                               ),
                             ),
@@ -271,15 +281,15 @@ class _AjouterRecetteState extends State<AjouterRecette> {
                               print(recetteOld?.id);
                               // RecetteService(recette:
                               recette = Recette(
-                                 // id: recetteOld!.id,
+                                  // id: recetteOld!.id,
                                   nom: _nameRecette.text,
                                   description: _descriptionRecette.text,
                                   photo: _image,
                                   video: _video!,
                                   ingredientList: _ingredientList);
-                                if(recetteOld?.id != null){
-                                  recette.id = recetteOld?.id;
-                                }
+                              if (recetteOld?.id != null) {
+                                recette.id = recetteOld?.id;
+                              }
                               debugPrint('la recette : ${recette.description}');
                               //);
                               Navigator.push(

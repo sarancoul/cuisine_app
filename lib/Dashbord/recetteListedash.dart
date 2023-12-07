@@ -1,6 +1,8 @@
 import 'package:flutte_cuisine/Dashbord/ajouterrecette.dart';
 import 'package:flutte_cuisine/Dashbord/recette_details_page.dart';
+import 'package:flutte_cuisine/Dashbord/serviceDashbord.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
 import 'package:flutte_cuisine/provider/util_provider.dart';
@@ -19,6 +21,8 @@ class RecetteAjout extends StatefulWidget {
 class _RecetteAjoutState extends State<RecetteAjout> {
   List<Recette> recettes = [];
   Recette? recette;
+  List<Utilisateur> utilisateurs = [];
+  Utilisateur? utilisateur;
 
   @override
   void initState() {
@@ -27,6 +31,7 @@ class _RecetteAjoutState extends State<RecetteAjout> {
     showRecettes();
     print("voici la taille niveau ");
     print(recettes.length);
+    showUtilisateurs();
   }
 
   void showRecettes() async {
@@ -34,6 +39,10 @@ class _RecetteAjoutState extends State<RecetteAjout> {
     print("voici la taille niveau 2");
     setState(() {});
     print(recettes.length);
+  }
+
+  void showUtilisateurs() async {
+    utilisateurs = await dashbordService().getAllUsers();
   }
 
   @override
@@ -52,12 +61,13 @@ class _RecetteAjoutState extends State<RecetteAjout> {
                 Container(
                   margin: const EdgeInsets.all(12),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
+                        width: MediaQuery.of(context).size.width * .115,
                         padding: const EdgeInsets.only(left: 30),
                         child: const Text(
-                          'Photo',
+                          'Recette',
                           style: TextStyle(
                             color: secondaryColor,
                             fontSize: 20,
@@ -66,9 +76,10 @@ class _RecetteAjoutState extends State<RecetteAjout> {
                         ),
                       ),
                       Container(
+                        width: MediaQuery.of(context).size.width * .25,
                         padding: const EdgeInsets.only(left: 50),
                         child: const Text(
-                          'Nom',
+                          'Utilisateurs',
                           style: TextStyle(
                             color: secondaryColor,
                             fontSize: 20,
@@ -76,19 +87,20 @@ class _RecetteAjoutState extends State<RecetteAjout> {
                           ),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 50),
-                        child: const Text(
-                          'Déscriptions',
-                          style: TextStyle(
-                            color: secondaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: const Text(
+                      // Container(
+                      //   padding: const EdgeInsets.only(left: 50),
+                      //   child: const Text(
+                      //     '',
+                      //     style: TextStyle(
+                      //       color: secondaryColor,
+                      //       fontSize: 20,
+                      //       fontWeight: FontWeight.bold,
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        width: 120,
+                        child: Text(
                           'Actions',
                           style: TextStyle(
                             color: secondaryColor,
@@ -187,7 +199,7 @@ class _RecetteAjoutState extends State<RecetteAjout> {
             SizedBox(
               width: 300,
               child: Text(
-                rec.description!,
+                "${rec.utilisateur!.nom!} ${rec.utilisateur!.prenom!}",
                 style: const TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.black,
@@ -253,11 +265,6 @@ class _RecetteAjoutState extends State<RecetteAjout> {
                         FontAwesomeIcons.trash,
                         color: secondaryColor,
                       )),
-
-                  // Icon(
-                  //   FontAwesomeIcons.trash,
-                  //   color: secondaryColor,
-                  // )
                 ],
               ),
             ),

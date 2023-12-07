@@ -3,12 +3,14 @@ import 'dart:typed_data';
 
 import 'package:flutte_cuisine/Model/Evaluation.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
+import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpUploadService {
   static Future<bool> updateVideo({required videoName, var video}) async {
-    String addimageUrl = 'http://localhost:8081/recette/updateVideo';
+    String addimageUrl = '${apiUrl}recette/updateVideo';
     var request = http.MultipartRequest('POST', Uri.parse(addimageUrl));
     print("check si la video n'est pas null");
     if (video != null) {
@@ -30,7 +32,7 @@ class HttpUploadService {
 
   static Future<bool> updateImage(
       {required String photoName, var image}) async {
-    String addimageUrl = 'http://localhost:8081/recette/updatePhoto';
+    String addimageUrl = '${apiUrl}recette/updatePhoto';
     var request = http.MultipartRequest('POST', Uri.parse(addimageUrl));
     print("check si la photo n'est pas null");
     if (image != null) {
@@ -53,8 +55,8 @@ class HttpUploadService {
   static Future<void> addAddRecette(
       {required BuildContext context,
       required Recette recette,
-      required utilisateur}) async {
-    String addimageUrl = 'http://localhost:8081/recette/upload';
+      required Utilisateur utilisateur}) async {
+    String addimageUrl = '${apiUrl}recette/upload';
     var request = http.MultipartRequest('POST', Uri.parse(addimageUrl));
     List jsonIngredientList = recette.ingredientList!
         .map((ingredient) => ingredient.toJson())
@@ -80,17 +82,12 @@ class HttpUploadService {
       'photo': "",
       'videoData': "",
       'ingredients': jsonIngredientList,
-      "utilisateur": {'id': '2'}
+      "utilisateur": utilisateur.toJson() //{'id': '2'}
     });
     print(request.fields['recette']);
     var response = await request.send();
     if (response.statusCode == 201) {
       print("donnée envoyé");
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => const Navigation(),
-      //     ));
     } else {
       print("Donnée non envoyé");
       print(response.statusCode);
@@ -99,7 +96,7 @@ class HttpUploadService {
 
 ///////////////////////////////###############################//////////////////////////////////////
   Future<List<Recette>> fetchRecettes() async {
-    String baseUrl = 'http://localhost:8081/recette';
+    String baseUrl = '${apiUrl}recette';
     String getRecetteUrl = '$baseUrl/all';
 
     try {
@@ -108,7 +105,7 @@ class HttpUploadService {
       print(response.body);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        // print("j'seuis la");
+
         try {
           List<Recette> recettes =
               jsonData.map((data) => Recette.fromJson(data)).toList();
@@ -127,8 +124,36 @@ class HttpUploadService {
     }
   }
 
+  Future<List<Recette>> fetchRecettesByUserId({userId}) async {
+    String baseUrl = '${apiUrl}recette';
+    String getRecetteUrl = '$baseUrl/userrecette?userId=$userId';
+    List<Recette> recettes = [];
+    try {
+      print(Uri.parse(getRecetteUrl));
+      final response = await http.get(Uri.parse(getRecetteUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        try {
+          recettes = jsonData.map((data) => Recette.fromJson(data)).toList();
+        } catch (e) {
+          print(e.toString());
+        }
+        return recettes;
+        // print("200");
+        // return jsonData.map((data) => Recette.fromJson(data)).toList();
+      } else {
+        throw Exception(
+            'Erreur lors de la récupération des recettes: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Erreur lors de la récupération des recettes: $error');
+    }
+  }
+
   static Future<List<Recette>> fetchAllRecettes() async {
-    String baseUrl = 'http://localhost:8081/recette';
+    String baseUrl = '${apiUrl}recette';
     String getRecetteUrl = '$baseUrl/all';
 
     try {
@@ -155,37 +180,12 @@ class HttpUploadService {
       throw Exception('Erreur lors de la récupération des recettes: $error');
     }
   }
-///////////////////////////#####################//////////////////////////////////////////////////
-  // static Future<bool> supprimerRecette(int id) async {
-  //   if (id == null) {
-  //     throw Exception('L\'identifiant de la recette est invalide.');
-  //   }
-
-  //   const String baseUrl = 'http://localhost:8081/recette/delete';
-  //   final String deleteRecetteUrl = '$baseUrl/$id';
-
-  //   try {
-  //     final response = await http.delete(Uri.parse(deleteRecetteUrl));
-
-  //     if (response.statusCode == 200) {
-  //       print('Recette supprimée avec succès.');
-  //       return true;
-  //     } else {
-  //       print(
-  //           'Erreur lors de la suppression de la recette: ${response.statusCode}');
-  //       return true;
-  //     }
-  //   } catch (error) {
-  //     print('Erreur lors de la suppression de la recette: $error');
-  //   }
-  //   return false;
-  // }
 
 //////////////////////////////////######################################################//////////////////////////////////////////////
   Future<List<Recette>> rechercher(String nom) async {
     try {
-      final response = await http
-          .get(Uri.parse('http://localhost:8081/recette/search/nom?nom=$nom'));
+      final response =
+          await http.get(Uri.parse('${apiUrl}recette/search/nom?nom=$nom'));
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
@@ -216,10 +216,10 @@ class HttpUploadService {
       print(evaluation.toJson());
 
       var response = await http.post(
-        Uri.parse('http://localhost:8081/recette/createEva'),
+        Uri.parse('${apiUrl}recette/createEva'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:8081',
+          'Access-Control-Allow-Origin': apiUrl,
         },
         body: jsonEncode(evaluation.toJson()),
       );
@@ -237,17 +237,14 @@ class HttpUploadService {
 
   ///////////////////////###########################AVOIR LE TOTAL DES RECETTES /////////////////////////////////////
 
-  static Future<int> getNombreTotalRecettes() async {
-    print("Le nombre de recette =>INII");
+  static Future<int> getNombreTotalRecettes({String id = "1"}) async {
     final response = await http.get(
-      Uri.parse(
-          'http://localhost:8081/recette/nombreTotalRecettes?utilisateurId=1'),
+      Uri.parse('${apiUrl}recette/nombreTotalRecettes?utilisateurId=$id'),
     );
-    print(response.statusCode);
-    print(response.body);
+
     if (response.statusCode == 200) {
       int jsonResponse = json.decode(response.body);
-      print("voici le nombre total$jsonResponse");
+
       return jsonResponse;
       //return jsonResponse['nombreTotalRecettes'];
     } else {
@@ -261,7 +258,7 @@ class HttpUploadService {
   //////////////////////////////###########Fonction recherche par ingredient###########/////////////////////
 
   Future<List<Recette>> searchRecipes(String ingredientNames) async {
-    const String apiUrl = 'http://localhost:8081/recette/chercher';
+    // String apiUrl = '${apiUrl}recette/chercher';
     //List<String> ingredientNames = ingredientNames.
     String queryParams = '?ingredientNames=""&ingredientNames=';
     String ings = ingredientNames.trim().split(" ").join("&ingredientNames=");
@@ -276,7 +273,7 @@ class HttpUploadService {
     try {
       // final String queryParams = 'ingredientNames=$ingredientNames';
 
-      print(Uri.parse('$apiUrl$queryParams'));
+      print(Uri.parse('${apiUrl}recette/chercher$apiUrl$queryParams'));
 
       final response = await http.get(Uri.parse('$apiUrl?$queryParams'));
 
@@ -292,18 +289,6 @@ class HttpUploadService {
     } catch (e) {
       print('Erreur : $e');
       return [];
-    }
-  }
-
-  ////////////////////////############prix moyen des ingrédients################/////////////////////////////////////
-  static Future<int> getNombreTotalUser() async {
-    final url = Uri.parse('http://localhost:8081/user/totalUsers');
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      return int.parse(response.body);
-    } else {
-      throw Exception(
-          'Erreur lors de la récupération du nombre d\'utilisateurs');
     }
   }
 }

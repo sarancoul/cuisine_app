@@ -2,9 +2,10 @@ import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette.dart';
-import 'package:flutte_cuisine/pages/profil.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class ServicePro extends StatefulWidget {
@@ -22,7 +23,10 @@ Future<void> showRecipeDescriptionDialog(
   String recipeName = recette.nom!;
   List<Ingredient>? ingredientList = recette.ingredientList;
   VideoPlayerController controllerVideo =
+      //kIsWeb
+      //?
       VideoPlayerController.networkUrl(Uri.parse(apiVideoUrl + recette.video));
+  //: VideoPlayerController.file(File(apiVideoUrl + recette.video));
   controllerVideo.initialize().then((_) {
     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
   });
@@ -316,16 +320,30 @@ Future<void> showRecipeDescriptionDialog(
                                 TextButton(
                                   child: const Text('Oui'),
                                   onPressed: () async {
+                                    context
+                                        .read<UtilProvider>()
+                                        .setclientCurrentIndex(1);
                                     bool result =
                                         await RecetteService.supprimerRecette(
                                             recette.id!);
+                                    print("je suis la");
+                                    print(result);
                                     if (result) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Profil(),
-                                          ));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const Profil(),
+                                      //     ));
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      context
+                                          .read<UtilProvider>()
+                                          .setclientCurrentIndex(3);
+
+                                      // context
+                                      //     .read<UtilProvider>()
+                                      //     .setclientCurrentIndex(3);
                                     }
                                   },
                                 ),
@@ -343,8 +361,8 @@ Future<void> showRecipeDescriptionDialog(
                       ),
                     ),
                     const SizedBox(
-                      width: 150.0, // Ajoutez de l'espace entre les boutons
-                    ),
+                        width: 60 // Ajoutez de l'espace entre les boutons
+                        ),
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(

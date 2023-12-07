@@ -50,9 +50,18 @@ class _AjouterRecetteDashState extends State<AjouterRecetteDash> {
     // ignore: unnecessary_null_comparison
     if (_image == null && recetteOld != null && recetteOld.nom != null) {
       print("building checking");
+      if (recetteOld.photo is XFile) {
+        // recetteOld.photo = recetteOld.photo.path;
+      }
+      if (recetteOld.video is XFile) {
+        recetteOld.video = recetteOld.video.path;
+      }
+      recetteOld.ingredientList ??= [];
       _nameRecette.text = recetteOld.nom!;
       _descriptionRecette.text = recetteOld.description!;
-      _image = apiImageUrl + recetteOld.photo;
+      _image = recetteOld.photo is XFile
+          ? recetteOld.photo
+          : apiImageUrl + recetteOld.photo;
       _video = apiVideoUrl + recetteOld.video;
       _ingredientList = recetteOld.ingredientList!;
       newR = false;
@@ -119,7 +128,7 @@ class _AjouterRecetteDashState extends State<AjouterRecetteDash> {
                             child: TextFormField(
                               controller: _nameRecette,
                               decoration: const InputDecoration(
-                                hintText: 'Ajouter une recette',
+                                hintText: 'Nom de la recette recette',
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.all(10),
                               ),
@@ -303,7 +312,8 @@ class _AjouterRecetteDashState extends State<AjouterRecetteDash> {
                               context.read<UtilProvider>().setRecette(recette);
                               context
                                   .read<UtilProvider>()
-                                  .setdashboardCurrentIndex(UtilProvider().getIndex(AjouterRecetteSecondePageDash));
+                                  .setdashboardCurrentIndex(UtilProvider()
+                                      .getIndex(AjouterRecetteSecondePageDash));
                               // widget.changePage(recette);
                             },
                             style: ElevatedButton.styleFrom(

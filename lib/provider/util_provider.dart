@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 class UtilProvider with ChangeNotifier {
   int _dashCurrentIndex = 0;
+
+  int _clientCurrentIndex = 0;
+
   Recette _recette = Recette();
   final List<Widget> _widgetOptions = <Widget>[
     const AccueilDashboard(),
@@ -24,6 +27,8 @@ class UtilProvider with ChangeNotifier {
 
   int get dashboardCurrentIndex => _dashCurrentIndex;
 
+  int get clientCurrentIndex => _clientCurrentIndex;
+
   Recette get recette => _recette;
 
   List<Widget> get widgetOptions => _widgetOptions;
@@ -35,6 +40,11 @@ class UtilProvider with ChangeNotifier {
 
   void setRecette(Recette recette) {
     _recette = recette;
+    notifyListeners();
+  }
+
+  void setclientCurrentIndex(int val) {
+    _clientCurrentIndex = val;
     notifyListeners();
   }
 

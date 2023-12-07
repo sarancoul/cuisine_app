@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutte_cuisine/Service/UtilisateurService.dart';
-import 'package:flutte_cuisine/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -101,13 +100,15 @@ class _LoginPageState extends State<Inscription> {
                     ),
                     Column(
                       children: [
-                        
-                        const Text(
-                          "Connexion",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w700),
+                        InkWell(
+                          onTap: () => Navigator.pushReplacementNamed(
+                              context, '/LoginPage'),
+                          child: const Text(
+                            "Connexion",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
                         ),
-                        
                         Visibility(
                           visible: false,
                           child: Container(
@@ -118,7 +119,6 @@ class _LoginPageState extends State<Inscription> {
                             width: 90,
                           ),
                         )
-                        
                       ],
                     )
                   ],
@@ -181,6 +181,7 @@ class _LoginPageState extends State<Inscription> {
                 ),
                 child: TextField(
                   controller: motdepasse_controller,
+                   obscureText: true,
                   decoration: const InputDecoration(
                     hintText: 'Mot de passe',
                     border: InputBorder.none,
@@ -233,18 +234,13 @@ class _LoginPageState extends State<Inscription> {
                             photo: photo);
                         // ignore: use_build_context_synchronously
                         setState(() {
-                          utilisateurInscrit = newuser
-                              .nom; 
-                        });/////// en cas de problem efface
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ));
-                        // Navigator.pushReplacementNamed(context, '/LoginPage');
+                          utilisateurInscrit = newuser.nom;
+                        }); /////// en cas de problem efface
+
+                        Navigator.pushReplacementNamed(context, '/LoginPage');
                       } catch (e) {
                         debugPrint(e.toString());
-                        String errorMessage = 'Inscription réussie';
+                        String errorMessage = 'Echec Inscription réussie';
                         // ignore: use_build_context_synchronously
                         showDialog(
                           context: context,

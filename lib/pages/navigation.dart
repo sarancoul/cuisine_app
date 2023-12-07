@@ -2,8 +2,10 @@ import 'package:flutte_cuisine/pages/accueil.dart';
 import 'package:flutte_cuisine/pages/ajouterrecette.dart';
 import 'package:flutte_cuisine/pages/discussions.dart';
 import 'package:flutte_cuisine/pages/profil.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -20,36 +22,50 @@ List<Widget> tabs = [
 ];
 
 class _NavigationState extends State<Navigation> {
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    int currentIndex = Provider.of<UtilProvider>(context).clientCurrentIndex;
     return Scaffold(
-      body: tabs[_currentIndex],
+      body: tabs[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         fixedColor: primaryColor,
+        unselectedItemColor: Colors.white,
         onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          context.read<UtilProvider>().setclientCurrentIndex(index);
+          // setState(() {
+          //   currentIndex = index;
+          // });
         },
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(
+                Icons.home,
+                color: currentIndex == 0 ? primaryColor : Colors.white,
+              ),
               label: 'Home',
-              backgroundColor: Color.fromARGB(255, 113, 111, 111)),
+              backgroundColor: const Color.fromRGBO(113, 111, 111, 1)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add),
+              icon: Icon(
+                Icons.add,
+                color: currentIndex == 1 ? primaryColor : Colors.white,
+              ),
               label: 'Ajouter',
-              backgroundColor: Color.fromARGB(255, 113, 111, 111)),
+              backgroundColor: const Color.fromARGB(255, 113, 111, 111)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
+              icon: Icon(
+                Icons.chat,
+                color: currentIndex == 2 ? primaryColor : Colors.white,
+              ),
               label: 'Discussionss',
-              backgroundColor: Color.fromARGB(255, 113, 111, 111)),
+              backgroundColor: const Color.fromARGB(255, 113, 111, 111)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(
+                Icons.person,
+                color: currentIndex == 3 ? primaryColor : Colors.white,
+              ),
               label: 'Profil',
-              backgroundColor: Color.fromARGB(255, 113, 111, 111)),
+              backgroundColor: const Color.fromARGB(255, 113, 111, 111)),
         ],
       ),
     );

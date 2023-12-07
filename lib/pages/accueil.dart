@@ -22,6 +22,10 @@ class _AccueilState extends State<Accueil> {
     //ServicePro(peutModifier: false,);
   }
 
+  void refreshData() {
+    setState(() {});
+  }
+
   Future<void> _searchRecettes(String search) async {
     try {
       setState(() {

@@ -19,6 +19,7 @@ class AjouterRecetteSecondePage extends StatefulWidget {
 
 class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
   //final HttpUploadService _httpUploadService = HttpUploadService();
+  bool waiting = false;
 
   //@override
   // ignore: must_call_super
@@ -152,11 +153,15 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Ajouter',
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.white),
-                                ),
+                                child: waiting
+                                    ? const CircularProgressIndicator(
+                                        color: secondaryColor,
+                                      )
+                                    : const Text(
+                                        'Ajouter',
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ),
                               ))
                         ],
                       ),
@@ -167,7 +172,10 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                   margin: const EdgeInsets.all(10),
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      setState(() {
+                        waiting = true;
+                      });
                       debugPrint(widget.recette.description.toString());
                       print("je vais initier l'envoi");
                       widget.recette.ingredientList = getIngredientData();
@@ -179,14 +187,22 @@ class _AjouterRecetteSecondePageState extends State<AjouterRecetteSecondePage> {
                         RecetteService.updateRecette(recette: widget.recette);
                         Navigator.pop(context);
                       } else {
-                        HttpUploadService.addAddRecette(
+                        await HttpUploadService.addAddRecette(
                             context: context,
                             recette: widget.recette,
                             utilisateur:
                                 context.read<UtilProvider>().utilisateur);
                       }
-                      setState(() {});
-                      Navigator.pushReplacementNamed(context, '/Navigation');
+                      Navigator.pop(context);
+                      context.read<UtilProvider>().setclientCurrentIndex(3);
+
+                      //Navigator.pushReplacementNamed(context, '/Profil');
+                      //setState(() {});
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => const Accueil(),
+                      //     ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,

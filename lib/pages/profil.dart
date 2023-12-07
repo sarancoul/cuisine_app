@@ -1,9 +1,12 @@
 import 'package:flutte_cuisine/Model/Recette_Model.dart';
+import 'package:flutte_cuisine/Model/Utilisateur_Model.dart';
 import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/Service/UtilisateurService.dart';
+import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
 import 'package:flutte_cuisine/widgets/cart_recette.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Profil extends StatefulWidget {
   const Profil({super.key});
@@ -18,24 +21,33 @@ class _ProfilState extends State<Profil> {
   String title = 'first page';
   String Supprimercompte = 'Supprimer compte';
   String Deconnexion = 'Deconnexion';
-  late Future<List<Recette>> futurerecettes;
-  late Future<int> dishCount;
+  Future<List<Recette>>? futurerecettes;
+  Future<int>? dishCount;
   TextEditingController photo_controller = TextEditingController();
 
   String? utilisateurInscrit;
   int? utilisateurId;
+  Utilisateur utilisateurN = const Utilisateur();
   @override
   void initState() {
     super.initState();
-    futurerecettes = HttpUploadService().fetchRecettes();
-    dishCount = HttpUploadService.getNombreTotalRecettes();
+    //dishCount = HttpUploadService.getNombreTotalRecettes();
     if (utilisateurId != null) {
       var user = UtilisateurService.getPhotoUrl(utilisateurId!);
     }
   }
 
+  void init() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    // futurerecettes = HttpUploadService().fetchRecettes();
+    //dishCount = HttpUploadService.getNombreTotalRecettes();
+    utilisateurN = Provider.of<UtilProvider>(context).utilisateur;
+    dishCount = HttpUploadService.getNombreTotalRecettes(
+        id: utilisateurN.id.toString());
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -133,7 +145,8 @@ class _ProfilState extends State<Profil> {
                 ],
               ),
               FutureBuilder<List<Recette>>(
-                future: futurerecettes,
+                future: HttpUploadService()
+                    .fetchRecettesByUserId(userId: utilisateurN.id ?? 2),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();

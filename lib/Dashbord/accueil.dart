@@ -16,6 +16,8 @@ class AccueilDashboard extends StatefulWidget {
 class _AccueilDashboardState extends State<AccueilDashboard> {
   late Future<List<Recette>> futurerecettes;
   late Future<int> dishCount;
+  late Future<int> recetteAdmin;
+
   int? utilisateurId;
   final dashbordService _service = dashbordService();
   late Future<int> utilisateurs;
@@ -26,7 +28,8 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
     super.initState();
     futurerecettes = HttpUploadService().fetchRecettes();
     dishCount = HttpUploadService.getNombreTotalRecettes();
-    utilisateurs = HttpUploadService.getNombreTotalRecettes();
+    recetteAdmin = dashbordService.getNombreTotalRecettesAdmin();
+    utilisateurs = dashbordService.getNombreTotalUser();
     initializeRecettes();
   }
 
@@ -220,7 +223,7 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
                                       // color: const Color.fromARGB(255, 234, 221, 221),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: const Row(
+                                    child: Row(
                                       children: [
                                         Expanded(
                                           child: Column(
@@ -229,7 +232,7 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 'Recettes Admin',
                                                 style: TextStyle(
                                                     color: secondaryColor,
@@ -237,18 +240,23 @@ class _AccueilDashboardState extends State<AccueilDashboard> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(height: 20),
-                                              Text(
-                                                '4',
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
+                                              const SizedBox(height: 20),
+                                              FutureBuilder(
+                                                  future: recetteAdmin,
+                                                  builder: (context, snapshot) {
+                                                    int? val = snapshot.data;
+                                                    return Text(
+                                                      '$val',
+                                                      style: const TextStyle(
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    );
+                                                  }),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 59,
                                           height: 50,
                                           child: Icon(

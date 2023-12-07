@@ -36,13 +36,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/Inscription': (context) => const Inscription(),
+        '/': (context) => const Inscription(),
         '/LoginPage': (context) => const LoginPage(),
         '/accueil': (context) => const Accueil(),
         '/Profil': (context) => const Profil(),
         '/AjouterRecette': (context) => AjouterRecette(),
-        '/': (context) => const Navigation(),
-        '/LoginPage': (context) => const LoginPage(),
+        '/Navigation': (context) => const Navigation(),
         '/inscription': (context) => const Inscription(),
         '/DashboardPage': (context) => const DashboardPage(
               title: 'Dashboard',

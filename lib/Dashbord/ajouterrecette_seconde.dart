@@ -1,3 +1,4 @@
+import 'package:flutte_cuisine/Dashbord/ajouterrecette.dart';
 import 'package:flutte_cuisine/Dashbord/recetteListedash.dart';
 import 'package:flutte_cuisine/Dashbord/widgets/dynamic_wiget.dart';
 import 'package:flutte_cuisine/Model/Ingredient_Model.dart';
@@ -6,6 +7,7 @@ import 'package:flutte_cuisine/Service/HtppUploadFileService.dart';
 import 'package:flutte_cuisine/Service/Recette_service.dart';
 import 'package:flutte_cuisine/provider/util_provider.dart';
 import 'package:flutte_cuisine/utils/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,7 @@ class AjouterRecetteSecondePageDash extends StatefulWidget {
 class _AjouterRecetteSecondePageDashState
     extends State<AjouterRecetteSecondePageDash> {
   Recette? recette;
+  bool waiting = false;
   //final HttpUploadService _httpUploadService = HttpUploadService();
 
   //@override
@@ -121,7 +124,15 @@ class _AjouterRecetteSecondePageDashState
                               child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    Navigator.of(context).pop();
+                                    if (!kIsWeb) {
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      context
+                                          .read<UtilProvider>()
+                                          .setdashboardCurrentIndex(
+                                              UtilProvider().getIndex(
+                                                  AjouterRecetteDash));
+                                    }
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -170,6 +181,9 @@ class _AjouterRecetteSecondePageDashState
                   width: MediaQuery.of(context).size.width * 0.2,
                   child: ElevatedButton(
                     onPressed: () async {
+                      setState(() {
+                        waiting = true;
+                      }); //j'ai ajouter cette partie
                       debugPrint(recette?.toString());
                       print("je vais initier l'envoi");
                       recette?.ingredientList = getIngredientData();
@@ -201,10 +215,12 @@ class _AjouterRecetteSecondePageDashState
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: const Text(
-                      'Enrégistrer',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                    child: waiting
+                        ? const CircularProgressIndicator(color: secondaryColor)
+                        : const Text(
+                            'Enrégistrer',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
                   ),
                 ),
               ],
